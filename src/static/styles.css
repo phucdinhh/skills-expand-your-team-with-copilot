@@ -644,6 +644,25 @@ footer {
   .sidebar-filters {
     width: 100%;
   }
+  
+  /* Theme toggle responsive adjustments */
+  #theme-toggle {
+    position: static;
+    margin: 10px auto 0;
+  }
+  
+  #theme-toggle span:not(.theme-icon) {
+    display: none;
+  }
+  
+  #user-controls {
+    position: static;
+    margin-top: 10px;
+  }
+  
+  header {
+    padding-bottom: 50px;
+  }
 }
 
 /* User controls in header */
@@ -723,25 +742,4 @@ footer {
 
 #theme-toggle .theme-icon {
   font-size: 1rem;
-}
-
-/* Responsive adjustment for theme toggle */
-@media (max-width: 767px) {
-  #theme-toggle {
-    position: static;
-    margin: 10px auto 0;
-  }
-  
-  #theme-toggle span:not(.theme-icon) {
-    display: none;
-  }
-  
-  #user-controls {
-    position: static;
-    margin-top: 10px;
-  }
-  
-  header {
-    padding-bottom: 50px;
-  }
 }
