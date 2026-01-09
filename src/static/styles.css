@@ -651,6 +651,9 @@ footer {
   position: absolute;
   top: 10px;
   right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 #user-status {
@@ -701,9 +704,6 @@ footer {
 
 /* Theme toggle button */
 #theme-toggle {
-  position: absolute;
-  top: 10px;
-  right: 150px;
   background-color: rgba(255, 255, 255, 0.2);
   border: none;
   border-radius: 20px;
@@ -726,10 +726,10 @@ footer {
 }
 
 /* Responsive adjustment for theme toggle */
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   #theme-toggle {
-    right: 10px;
-    padding: 6px 10px;
+    position: static;
+    margin: 10px auto 0;
   }
   
   #theme-toggle span:not(.theme-icon) {
@@ -739,5 +739,9 @@ footer {
   #user-controls {
     position: static;
     margin-top: 10px;
+  }
+  
+  header {
+    padding-bottom: 50px;
   }
 }
