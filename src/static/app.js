@@ -683,6 +683,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add event listeners for difficulty filter buttons
   difficultyFilters.forEach((button) => {
     button.addEventListener("click", () => {
+      // If clicking already active button, deactivate it (show all)
+      if (button.classList.contains("active")) {
+        button.classList.remove("active");
+        currentDifficulty = "";
+        fetchActivities();
+        return;
+      }
+
       // Update active class
       difficultyFilters.forEach((btn) => btn.classList.remove("active"));
       button.classList.add("active");
