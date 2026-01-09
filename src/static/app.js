@@ -555,19 +555,19 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="social-sharing">
         <span class="share-label">Share:</span>
         <button class="share-button facebook tooltip" data-activity="${name}" data-platform="facebook" aria-label="Share on Facebook">
-          <span class="share-icon">📘</span>
+          <span class="share-icon" role="img" aria-label="Facebook icon">📘</span>
           <span class="tooltip-text">Share on Facebook</span>
         </button>
         <button class="share-button twitter tooltip" data-activity="${name}" data-platform="twitter" aria-label="Share on Twitter">
-          <span class="share-icon">🐦</span>
+          <span class="share-icon" role="img" aria-label="Twitter icon">🐦</span>
           <span class="tooltip-text">Share on Twitter</span>
         </button>
         <button class="share-button email tooltip" data-activity="${name}" data-platform="email" aria-label="Share via Email">
-          <span class="share-icon">📧</span>
+          <span class="share-icon" role="img" aria-label="Email icon">📧</span>
           <span class="tooltip-text">Share via Email</span>
         </button>
         <button class="share-button copy-link tooltip" data-activity="${name}" data-platform="copy" aria-label="Copy Link">
-          <span class="share-icon">🔗</span>
+          <span class="share-icon" role="img" aria-label="Link icon">🔗</span>
           <span class="tooltip-text">Copy link to clipboard</span>
         </button>
       </div>
@@ -890,6 +890,33 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeRangeFilter,
   };
 
+  // Fallback function for copying to clipboard in older browsers
+  function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.opacity = "0";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        showMessage("Link copied to clipboard!", "success");
+      } else {
+        showMessage("Failed to copy link", "error");
+      }
+    } catch (err) {
+      console.error("Fallback: Failed to copy", err);
+      showMessage("Failed to copy link", "error");
+    }
+
+    document.body.removeChild(textArea);
+  }
+
   // Handle social sharing
   function handleShare(activityName, details, platform) {
     const activityUrl = `${window.location.origin}${window.location.pathname}`;
@@ -924,15 +951,23 @@ document.addEventListener("DOMContentLoaded", () => {
       case "copy":
         // Copy link to clipboard
         const clipboardText = `${activityName}\n${details.description}\n\n${activityUrl}`;
-        navigator.clipboard
-          .writeText(clipboardText)
-          .then(() => {
-            showMessage("Link copied to clipboard!", "success");
-          })
-          .catch((err) => {
-            console.error("Failed to copy:", err);
-            showMessage("Failed to copy link", "error");
-          });
+        
+        // Check if clipboard API is available
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(clipboardText)
+            .then(() => {
+              showMessage("Link copied to clipboard!", "success");
+            })
+            .catch((err) => {
+              console.error("Failed to copy:", err);
+              // Fallback method
+              fallbackCopyToClipboard(clipboardText);
+            });
+        } else {
+          // Use fallback method for older browsers
+          fallbackCopyToClipboard(clipboardText);
+        }
         break;
 
       default:
